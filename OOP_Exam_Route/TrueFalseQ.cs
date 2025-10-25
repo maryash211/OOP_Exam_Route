@@ -10,6 +10,10 @@ namespace OOP_Exam_Route
     {
         public override void CreateQuestion()
         {
+            AnswerList = new Answer[2];
+            AnswerList[0] = new Answer(1, "True");
+            AnswerList[1] = new Answer(2, "False");
+
             Header = "True/False Question";
             Console.WriteLine(Header);
 
@@ -36,11 +40,14 @@ namespace OOP_Exam_Route
                 Console.Write("Enter the Right answer of the question ( 1 for True \t 2 for false): ");
                 isparsed = int.TryParse(Console.ReadLine(), out rightAns);
             }
-            while (!isparsed || (rightAns != 1 || rightAns != 2));
+            while (!isparsed || (rightAns != 1 && rightAns != 2));
 
-            RightAnswer.AnswerId = rightAns;
-           
-            RightAnswer.AnswerText = rightAns == 1 ? "True" : "False";
+            
+            RightAnswer = new Answer
+            {
+                AnswerId = rightAns,
+                AnswerText = AnswerList[rightAns - 1].AnswerText
+            };
 
             Console.Clear();
 

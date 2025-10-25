@@ -15,38 +15,45 @@ namespace OOP_Exam_Route
 
         public void CreateExam()
         {
+            Console.WriteLine("\n\t#\t Exam Creation \t\t# ");
             int examType, time, NumOfQuestions;
             bool isparsed;
             do
             {
-                Console.WriteLine("Enter the type of Exam : \n1 -> Practical\n2 -> Final");
+                Console.Write("Choose the type of Exam : \n1 -> Practical\n2 -> Final\ntype: ");
                 isparsed = int.TryParse(Console.ReadLine(), out examType);
             }
-            while (!isparsed || (examType != 1 || examType != 2));
+            while (!isparsed || (examType != 1 && examType != 2));
 
             do
             {
-                Console.WriteLine("Enter the time of the exam: ");
+                Console.Write("Enter the time of the exam: ");
                 isparsed = int.TryParse(Console.ReadLine(), out time);
             }
             while (!isparsed || (time <0 ));
 
             do
             {
-                Console.WriteLine("Enter the number of questions: ");
+                Console.Write("Enter the number of questions: ");
                 isparsed = int.TryParse(Console.ReadLine(), out NumOfQuestions);
             }
             while (!isparsed || (NumOfQuestions < 0));
 
             if (examType == 1)
             {
-                PracticalExam p = new PracticalExam(time, NumOfQuestions);
+                SubjectExam = new PracticalExam(time, NumOfQuestions);
             }
             else
             {
-                FinalExam f = new FinalExam(time, NumOfQuestions);
+                SubjectExam = new FinalExam(time, NumOfQuestions);
             }
             Console.Clear();
+            SubjectExam.CreateQuestionList(); 
+        }
+
+        public override string ToString()
+        {
+            return $"Subject name = {SubjectName}\t Subject id = {SubjectId}";
         }
 
     }

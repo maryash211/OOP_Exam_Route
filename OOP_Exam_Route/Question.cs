@@ -16,7 +16,13 @@ namespace OOP_Exam_Route
 
         public Answer UserAnswer { get; set; }
 
-        public abstract void CreateQuestion(); 
+        public abstract void CreateQuestion();
+
+        public override string ToString() 
+        {
+            return $"{Header}:  {Body} [Mark: {Mark}]";
+        }
+
 
 
     }

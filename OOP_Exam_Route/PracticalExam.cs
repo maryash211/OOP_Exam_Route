@@ -13,33 +13,42 @@ namespace OOP_Exam_Route
             TimeOfExam = t;
             NumOfQuestions = QuestionsNum;
         }
-        public override void ShowExam()
+
+
+        public override void CreateQuestionList()
         {
-            var questions = new List<Question>();
-            for (int i = 0; i < NumOfQuestions; i++)
+            for (int i = 0; i<NumOfQuestions; i++)
             {
                 Console.WriteLine($"Question no.{i + 1}");
+
                 MCQ q = new MCQ();
                 q.CreateQuestion();
-                questions.Add( q );
+                questions.Add(q);
             }
+        }
 
+        public override void ShowExam()
+        {
             //exam show up for student from here:
 
             Console.WriteLine("Answer the following questions: ");
-            foreach (var question in questions)
+            foreach (Question question in questions)
             {
+                //show question
                 Console.WriteLine(question);
+
+                //show choices
                 for (int i = 0; i < question.AnswerList.Length; i++)
                 {
                     Console.WriteLine($"{i + 1}. {question.AnswerList[i].AnswerText}");
                 }
 
+                //take answer from user
                 int choice;
                 bool isparsed;
                 do
                 {
-                    Console.WriteLine("Enter your answer: ");
+                    Console.Write("Enter your answer: ");
                     isparsed = int.TryParse(Console.ReadLine(), out choice);
                 }
                 while (!isparsed || (choice < 1 || choice > question.AnswerList.Length));
@@ -53,10 +62,12 @@ namespace OOP_Exam_Route
             Console.Clear();
 
 
-            Console.WriteLine("Exam finished! Right Answer: ");
+            //show right answers
+            Console.WriteLine("\t* Exam finished! *");
             foreach (var question in questions)
             {
-                Console.WriteLine($"Question: {question.Body}");
+                Console.WriteLine("[Answers]");
+                Console.WriteLine($"Question : {question.Body}");
                 Console.WriteLine($"Right Answer: {question.RightAnswer.AnswerText}");
                 Console.WriteLine();
             }

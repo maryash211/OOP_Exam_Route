@@ -13,10 +13,11 @@ namespace OOP_Exam_Route
             TimeOfExam = t;
             NumOfQuestions = QuestionsNum;
         }
-        public override void ShowExam()
+
+        public override void CreateQuestionList()
         {
-            var questions = new List<Question>(); //to contain questions
-            Console.WriteLine($"Final Exam: Time = {TimeOfExam} minutes, Questions = {NumOfQuestions}");
+            Console.Write($"Final Exam: ");
+            Console.WriteLine(this);
 
             for (int i = 0; i < NumOfQuestions; i++)
             {
@@ -24,10 +25,11 @@ namespace OOP_Exam_Route
                 bool isparsed;
                 do
                 {
-                    Console.WriteLine($"Choose type for Question : {i + 1}: 1 -> True/False, 2 -> MCQ");
+                    Console.WriteLine($"Choose type for Question no.{i + 1}: [1 -> True/False, 2 -> MCQ]");
+                    Console.Write("type: ");
                     isparsed = int.TryParse(Console.ReadLine(), out qtype);
                 }
-                while (!isparsed || (qtype != 1 || qtype != 2));
+                while (!isparsed || (qtype != 1 && qtype != 2));
 
                 Question q;
 
@@ -44,32 +46,69 @@ namespace OOP_Exam_Route
             }
 
 
+        }
+
+        public override void ShowExam()
+        {
             Console.WriteLine("Answer the following questions: ");
-            foreach (var question in questions)
+
+            foreach (Question question in questions)
             {
                 Console.WriteLine(question);
+            
                 for (int i = 0; i < question.AnswerList.Length; i++)
                 {
                     Console.WriteLine($"{i + 1}. {question.AnswerList[i].AnswerText}");
                 }
-                int choice;
+
+                int Stdchoice = 0;
                 bool isparsed;
-                do
+
+                if (question is MCQ)
                 {
-                    Console.WriteLine("Enter your answer: ");
-                    isparsed = int.TryParse(Console.ReadLine(), out choice);
+                    do
+                    {
+                        Console.WriteLine("Enter your answer (choose between 4 choices): ");
+                        isparsed = int.TryParse(Console.ReadLine(), out Stdchoice);
+                    }
+                    while (!isparsed || (Stdchoice < 1 || Stdchoice > question.AnswerList.Length));
+
                 }
-                while (!isparsed || (choice < 1 || choice > question.AnswerList.Length));
+                else if (question is TrueFalseQ)
+                {
+                    do
+                    {
+                        Console.WriteLine("Enter your answer (1 => \"True\"\t2 => \"False\"): ");
+                        isparsed = int.TryParse(Console.ReadLine(), out Stdchoice);
+                    }
+                    while (!isparsed || (Stdchoice < 1 || Stdchoice > 2));
+                }
+
+     
                 question.UserAnswer = new Answer
                 {
-                    AnswerId = choice,
-                    AnswerText = question.AnswerList[choice - 1].AnswerText
+                    AnswerId = Stdchoice,
+                    AnswerText = question.AnswerList[Stdchoice - 1].AnswerText
                 };
             }
+            Console.Clear();
+
+            double totalMarks = 0;
+            double grade = 0;
+            foreach (Question q in questions)
+            {
+                totalMarks += q.Mark;
+
+                if (q.UserAnswer.AnswerId == q.RightAnswer.AnswerId)
+                {
+                    grade += q.Mark;
+                }
+
+                Console.WriteLine($"Question: {q.Body}");
+                Console.WriteLine($"Your Answer = {q.UserAnswer.AnswerText}");
+                Console.WriteLine($"The Right Answer = {q.RightAnswer.AnswerText}");
+            }
+            Console.WriteLine($"Your grade = {grade} out of {totalMarks}");
         }
-
-
-
-
     }
 }

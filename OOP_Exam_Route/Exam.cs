@@ -12,5 +12,18 @@ namespace OOP_Exam_Route
         public int NumOfQuestions { get; set; }
 
         public abstract void ShowExam();
+
+
+        //these are to hold questions for each exam
+        public List<Question> questions = new List<Question>();
+        public abstract void CreateQuestionList();
+
+
+        public override string ToString()
+        {
+            return $"Time = {TimeOfExam} minutes, Questions = {NumOfQuestions}";
+
+        }
+
     }
 }
